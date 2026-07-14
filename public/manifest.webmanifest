@@ -1,0 +1,15 @@
+{
+  "name": "Color Coordinator",
+  "short_name": "Color Coord",
+  "description": "Free color wheel and palette generator. Create harmony color schemes, Tailwind shade scales, check WCAG contrast, and export CSS, SCSS, Tailwind or JSON.",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#FAFAF7",
+  "theme_color": "#1D9E75",
+  "icons": [
+    { "src": "icon-192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "icon-512.png", "sizes": "512x512", "type": "image/png" },
+    { "src": "icon-512-maskable.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}
