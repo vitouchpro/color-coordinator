@@ -1,9 +1,10 @@
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 
-// base must match the GitHub repo name for Pages deployment
+// Served from the domain root on Vercel, so base is '/'.
+// (For GitHub Pages project sites, this would need to be '/color-coordinator/'.)
 export default defineConfig({
   plugins: [react()],
-  base: '/color-coordinator/',
+  base: '/',
   build: { outDir: 'dist', sourcemap: false }
 });

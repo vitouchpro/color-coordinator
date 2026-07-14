@@ -3,7 +3,7 @@
 > Free online color wheel and palette generator. Create harmony color schemes (complementary, analogous, split-complementary, triadic, tetradic, monochrome), Tailwind CSS 50-900 shade scales, WCAG AA/AAA contrast checks, extract palettes from images, and export CSS variables, Tailwind config, SCSS or JSON. Runs fully in the browser, free, private, no sign-up.
 
 ## Key facts
-- URL: https://vitouchpro.github.io/color-coordinator/
+- URL: https://color-coordinator.vercel.app/
 - Price: Free, no account required
 - Privacy: All processing is local in the browser; uploaded images are never sent to a server
 - Exports: CSS custom properties, Tailwind config, SCSS variables, JSON, PNG

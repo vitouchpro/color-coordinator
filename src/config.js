@@ -11,7 +11,7 @@ export const CONFIG = {
   githubUrl: 'https://github.com/vitouchpro',
 
   // Deployment origin + base path — used by the SEO page generator for canonical URLs.
-  site: { origin: 'https://vitouchpro.github.io', base: '/color-coordinator/' },
+  site: { origin: 'https://color-coordinator.vercel.app', base: '/' },
 
   // Display ads. Leave carbonServe empty to disable ads entirely (default: no external
   // ad calls, privacy brand preserved). Fill both from your Carbon/BuySellAds account to enable.
