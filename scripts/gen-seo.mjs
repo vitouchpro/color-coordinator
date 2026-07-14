@@ -35,7 +35,7 @@ const carbon = CONFIG.ads.carbonServe
        id="_carbonads_js"></script></div>`
   : '';
 
-function shell({ title, description, canonical, h1, body }) {
+function shell({ title, description, canonical, h1, body, robots = 'index, follow, max-image-preview:large' }) {
   return `<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -43,7 +43,7 @@ function shell({ title, description, canonical, h1, body }) {
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>${esc(title)}</title>
 <meta name="description" content="${esc(description)}">
-<meta name="robots" content="index, follow, max-image-preview:large">
+<meta name="robots" content="${robots}">
 <meta name="theme-color" content="#FAFAF7" media="(prefers-color-scheme: light)">
 <meta name="theme-color" content="#131316" media="(prefers-color-scheme: dark)">
 <link rel="canonical" href="${canonical}">
@@ -234,6 +234,29 @@ function hubPage() {
   });
 }
 
+/* ---------- 404 (served by Vercel for any unmatched path) ---------- */
+function notFoundPage() {
+  const body = `
+<section>
+  <div class="hero-sw" style="background:var(--live);color:#fff;font-size:34px">404</div>
+  <p style="margin-top:16px">The page you're looking for doesn't exist or may have moved.
+  Here's where to go instead:</p>
+  <a class="cta" href="${rel('')}">Open the color wheel →</a>
+  <div class="links" style="margin-top:14px">
+    <a href="${rel('colors/')}">Browse all colors</a>
+    <a href="${rel('harmonies/analogous/')}">Color harmony guides</a>
+  </div>
+</section>`;
+  return shell({
+    title: 'Page not found (404) — Color Coordinator',
+    description: 'The page you are looking for could not be found.',
+    canonical: abs(''),
+    h1: 'Page not found',
+    body,
+    robots: 'noindex, follow'
+  });
+}
+
 /* ---------- write everything ---------- */
 function write(pathNoSlash, html) {
   const dir = join(DIST, pathNoSlash);
@@ -242,6 +265,7 @@ function write(pathNoSlash, html) {
 }
 
 const urls = [];
+writeFileSync(join(DIST, '404.html'), notFoundPage());
 write('colors', hubPage());
 urls.push(abs('colors/'));
 
@@ -266,4 +290,4 @@ ${urls.map(u => `  <url><loc>${u}</loc><lastmod>${today}</lastmod><changefreq>mo
 </urlset>`;
 writeFileSync(join(DIST, 'sitemap.xml'), sitemap);
 
-console.log(`SEO: generated ${NAMED_COLORS.length} color pages + ${Object.keys(HARMONIES).length} harmony pages + hub, and ${urls.length + 1} sitemap URLs.`);
+console.log(`SEO: generated ${NAMED_COLORS.length} color pages + ${Object.keys(HARMONIES).length} harmony pages + hub + 404, and ${urls.length + 1} sitemap URLs.`);
