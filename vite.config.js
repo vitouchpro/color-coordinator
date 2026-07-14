@@ -6,5 +6,7 @@ import react from '@vitejs/plugin-react';
 export default defineConfig({
   plugins: [react()],
   base: '/',
-  build: { outDir: 'dist', sourcemap: false }
+  build: { outDir: 'dist', sourcemap: false },
+  // Pure color/exporter utils run in a plain Node environment (no DOM needed).
+  test: { environment: 'node', include: ['src/**/*.test.js'] }
 });
