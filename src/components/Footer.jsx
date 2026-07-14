@@ -6,6 +6,7 @@ export default function Footer() {
       <div className="footer-inner">
         <span>Color Coordinator — free &amp; open color theme tool.</span>
         <span className="footer-links">
+          <a href={`${CONFIG.site.base}pricing/`}>Pricing</a>
           <a href={`${CONFIG.site.base}colors/`}>Browse colors</a>
           <a href={`${CONFIG.site.base}harmonies/analogous/`}>Harmony guides</a>
         </span>

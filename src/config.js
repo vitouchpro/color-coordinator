@@ -9,6 +9,7 @@ export const CONFIG = {
   extractColors: 6,
   toastMs: 1600,
   githubUrl: 'https://github.com/vitouchpro',
+  contactEmail: 'vitouchpro@gmail.com',   // used for the Enterprise "Contact sales" CTA
 
   // Deployment origin + base path — used by the SEO page generator for canonical URLs.
   site: { origin: 'https://color-coordinator.vercel.app', base: '/' },

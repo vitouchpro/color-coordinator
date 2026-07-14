@@ -259,6 +259,8 @@ pre.code {
 
 /* ---------- Pro / ads ---------- */
 .pro-perks { font-size: 13.5px; color: var(--muted); line-height: 1.55; }
+.dialog-link { font-size: 13px; color: var(--live); text-decoration: none; }
+.dialog-link:hover { text-decoration: underline; }
 .pro-status { font-size: 13px; margin-top: 2px; }
 .pro-status.ok { color: var(--live); }
 .pro-status.err { color: #E24B4A; }

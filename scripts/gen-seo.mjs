@@ -8,6 +8,7 @@ import { join } from 'node:path';
 import { CONFIG, HARMONIES } from '../src/config.js';
 import { hexToRgb, rgbToHsl, hslToHex, contrastRatio, colorName } from '../src/utils/color.js';
 import { NAMED_COLORS, slugify } from './seo-colors.mjs';
+import { PLANS, FEATURES } from '../src/plans.js';
 
 const DIST = join(process.cwd(), 'dist');
 const { origin, base } = CONFIG.site;
@@ -35,7 +36,8 @@ const carbon = CONFIG.ads.carbonServe
        id="_carbonads_js"></script></div>`
   : '';
 
-function shell({ title, description, canonical, h1, body, robots = 'index, follow, max-image-preview:large' }) {
+function shell({ title, description, canonical, h1, body, robots = 'index, follow, max-image-preview:large', crumb }) {
+  const crumbHtml = crumb ?? `&rsaquo; <a href="${rel('colors/')}">Colors</a>`;
   return `<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -79,7 +81,7 @@ function shell({ title, description, canonical, h1, body, robots = 'index, follo
 </head>
 <body>
 <header>
-  <div class="crumb"><a href="${rel('')}">Color Coordinator</a> &rsaquo; <a href="${rel('colors/')}">Colors</a></div>
+  <div class="crumb"><a href="${rel('')}">Color Coordinator</a> ${crumbHtml}</div>
   <h1>${esc(h1)}</h1>
 </header>
 <main>
@@ -234,6 +236,59 @@ function hubPage() {
   });
 }
 
+/* ---------- pricing page ---------- */
+function pricingCell(v) {
+  if (v === true) return '<td class="yes" aria-label="included">&#10003;</td>';
+  if (v === false) return '<td class="no" aria-label="not included">&ndash;</td>';
+  return `<td>${esc(v)}</td>`;
+}
+
+function pricingPage() {
+  const heads = PLANS.map(p =>
+    `<th class="${p.highlight ? 'hl' : ''}">
+      <div class="pname">${esc(p.name)}</div>
+      <div class="pprice">${esc(p.price)}</div>
+      <div class="ptag">${esc(p.tagline)}</div>
+      <a class="cta ${p.highlight ? '' : 'ghost'}" href="${p.cta.href}">${esc(p.cta.label)}</a>
+    </th>`).join('');
+  const rows = FEATURES.map(f =>
+    `<tr><th scope="row">${esc(f.label)}</th>${pricingCell(f.free)}${pricingCell(f.pro)}${pricingCell(f.enterprise)}</tr>`).join('');
+  const body = `
+<style>
+  .pricing-wrap{overflow-x:auto;margin-top:10px}
+  table.pricing{border-collapse:collapse;width:100%;min-width:580px}
+  table.pricing th,table.pricing td{padding:12px 14px;text-align:center;border-bottom:1px solid var(--border)}
+  table.pricing thead th{vertical-align:top;border-bottom:2px solid var(--border)}
+  table.pricing tbody th{text-align:left;font-weight:500;color:var(--ink)}
+  .pname{font-weight:700;font-size:18px}
+  .pprice{font-size:15px;color:var(--muted);margin:2px 0 6px}
+  .ptag{font-size:12px;color:var(--muted);font-weight:400;max-width:190px;margin:0 auto 12px}
+  th.hl{background:rgba(29,158,117,.08);border-radius:12px 12px 0 0}
+  .cta.ghost{background:transparent;color:var(--live);border:1px solid var(--live)}
+  td.yes{color:var(--live);font-weight:700}
+  td.no{color:var(--muted)}
+</style>
+<section>
+  <p>Start free. Upgrade when you need more. The tool runs entirely in your browser — no sign-up required to use it.</p>
+  <div class="pricing-wrap">
+    <table class="pricing">
+      <thead><tr><td></td>${heads}</tr></thead>
+      <tbody>${rows}</tbody>
+    </table>
+  </div>
+  <p style="margin-top:18px;font-size:13px">Enterprise features (team libraries, white-label and the AI/LLM color API) are rolling out —
+  <a href="${PLANS[2].cta.href}">contact sales</a> for early access and custom pricing.</p>
+</section>`;
+  return shell({
+    title: 'Pricing — Free, Pro & Enterprise | Color Coordinator',
+    description: 'Color Coordinator pricing: a free color wheel and palette generator, an affordable Pro plan (ad-free, unlimited saved palettes, richer extraction), and Enterprise with team libraries, white-label and an AI/LLM color API.',
+    canonical: abs('pricing/'),
+    h1: 'Simple pricing',
+    crumb: '&rsaquo; Pricing',
+    body
+  });
+}
+
 /* ---------- 404 (served by Vercel for any unmatched path) ---------- */
 function notFoundPage() {
   const body = `
@@ -267,6 +322,8 @@ function write(pathNoSlash, html) {
 // Sitemap entries carry a tiered priority: home > hub > harmony guides > color pages.
 const entries = [{ loc: abs(''), priority: '1.0' }];
 writeFileSync(join(DIST, '404.html'), notFoundPage());
+write('pricing', pricingPage());
+entries.push({ loc: abs('pricing/'), priority: '0.8' });
 write('colors', hubPage());
 entries.push({ loc: abs('colors/'), priority: '0.8' });
 
@@ -294,4 +351,4 @@ ${entries.map(urlTag).join('\n')}
 `;
 writeFileSync(join(DIST, 'sitemap.xml'), sitemap);
 
-console.log(`SEO: generated ${NAMED_COLORS.length} color pages + ${Object.keys(HARMONIES).length} harmony pages + hub + 404, and ${entries.length} sitemap URLs.`);
+console.log(`SEO: generated ${NAMED_COLORS.length} color pages + ${Object.keys(HARMONIES).length} harmony pages + hub + pricing + 404, and ${entries.length} sitemap URLs.`);

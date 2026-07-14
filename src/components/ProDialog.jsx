@@ -34,6 +34,7 @@ export default function ProDialog({ open, onVerify, onClose }) {
           Unlock unlimited saved palettes, richer image extraction and an ad-free workspace
           {price ? ` — ${price}` : ''}{recurring ? '. Cancel anytime.' : ', a one-time purchase.'}
         </p>
+        <a className="dialog-link" href={`${CONFIG.site.base}pricing/`}>See all plans &rarr;</a>
         {gumroadUrl && (
           <a className="btn primary" href={gumroadUrl} target="_blank" rel="noopener noreferrer" style={{ textDecoration: 'none' }}>
             Get Pro on Gumroad →
