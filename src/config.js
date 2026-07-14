@@ -19,7 +19,14 @@ export const CONFIG = {
 
   // Pro unlock via Gumroad license keys. Leave permalink empty to hide the upgrade UI.
   // gumroadPermalink is the product's Gumroad permalink; gumroadUrl is the full buy link.
-  pro: { gumroadPermalink: '', gumroadUrl: '', price: '$14 one-time', maxLibrary: 1000, extractColors: 12 }
+  // Set recurring: true for a Gumroad subscription/membership product (Pro is then
+  // re-verified every recheckDays and revoked when the subscription lapses); false for
+  // a one-time purchase.
+  pro: {
+    gumroadPermalink: '', gumroadUrl: '',
+    recurring: true, price: '$4/mo', recheckDays: 7,
+    maxLibrary: 1000, extractColors: 12
+  }
 };
 
 export const HARMONIES = {

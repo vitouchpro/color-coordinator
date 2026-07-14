@@ -82,8 +82,17 @@ per request — so the tag is loaded without `integrity`; it only loads once you
 (the product permalink) and `CONFIG.pro.gumroadUrl` (the buy link). An **Upgrade** button
 appears; buyers paste their license key, which is verified against Gumroad's API and stored
 in `localStorage`. Pro perks: ad-free, unlimited saved palettes (`CONFIG.pro.maxLibrary`),
-and richer image extraction (`CONFIG.pro.extractColors`). Verification is client-side — fine
-for a low-price utility, but note it can be bypassed by a determined user.
+and richer image extraction (`CONFIG.pro.extractColors`).
+
+Supports both models via `CONFIG.pro.recurring`:
+- `false` — one-time purchase (valid until refunded).
+- `true` — Gumroad subscription/membership. The license is re-verified every
+  `CONFIG.pro.recheckDays` and Pro is revoked once the subscription lapses (the
+  `isActive()` predicate in `src/utils/license.js` keeps access through a pending
+  cancellation until the paid period ends).
+
+Verification is client-side — fine for a low-price utility, but note it can be bypassed by a
+determined user; move it behind a Vercel Function if you need hard enforcement.
 
 ## License
 

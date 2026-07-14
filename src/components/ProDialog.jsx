@@ -8,7 +8,7 @@ export default function ProDialog({ open, onVerify, onClose }) {
   const [key, setKey] = useState('');
   const [status, setStatus] = useState(null);
   const [busy, setBusy] = useState(false);
-  const { gumroadUrl, price } = CONFIG.pro;
+  const { gumroadUrl, price, recurring } = CONFIG.pro;
 
   useEffect(() => {
     const dlg = ref.current;
@@ -31,8 +31,8 @@ export default function ProDialog({ open, onVerify, onClose }) {
       <div className="dialog-body">
         <h2 className="dialog-title">Color Coordinator Pro</h2>
         <p className="pro-perks">
-          Unlock unlimited saved palettes, richer image extraction and an ad-free workspace — a one-time
-          purchase{price ? ` (${price})` : ''}, no subscription.
+          Unlock unlimited saved palettes, richer image extraction and an ad-free workspace
+          {price ? ` — ${price}` : ''}{recurring ? '. Cancel anytime.' : ', a one-time purchase.'}
         </p>
         {gumroadUrl && (
           <a className="btn primary" href={gumroadUrl} target="_blank" rel="noopener noreferrer" style={{ textDecoration: 'none' }}>
