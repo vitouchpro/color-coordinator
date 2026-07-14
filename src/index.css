@@ -271,6 +271,7 @@ pre.code {
 .ad-slot { display: flex; justify-content: center; margin: 28px 0 0; min-height: 1px; }
 
 footer { border-top: 1px solid var(--border); margin-top: 40px; }
-.footer-inner { max-width: 1100px; margin: 0 auto; padding: 20px; font-size: 13px; color: var(--muted); display: flex; flex-wrap: wrap; gap: 8px; justify-content: space-between; }
+.footer-inner { max-width: 1100px; margin: 0 auto; padding: 20px; font-size: 13px; color: var(--muted); display: flex; flex-wrap: wrap; gap: 8px 16px; justify-content: space-between; }
+.footer-links { display: flex; gap: 16px; }
 footer a { color: var(--live); text-decoration: none; }
 .sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }

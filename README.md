@@ -1,29 +1,37 @@
 # Color Coordinator (React)
 
-Free color wheel and palette generator — React 19 + Vite migration with full feature and SEO parity with the vanilla version.
+Free color wheel and palette generator — React 19 + Vite, deployed on Vercel.
 
-**Live:** `https://YOUR-USERNAME.github.io/color-coordinator/`
+**Live:** https://color-coordinator.vercel.app/
 
 ## Stack
 
-- React 19, Vite 6, zero runtime dependencies beyond React
-- All SEO (meta, Open Graph, JSON-LD WebApplication + FAQPage schema) lives in the static `index.html` shell, so crawlers get it without executing JavaScript
-- Configuration centralized in `src/config.js`; design tokens in CSS custom properties in `src/index.css` — no hardcoded values downstream
+- React 19, Vite 6, self-hosted fonts (@fontsource); no other runtime dependencies
+- SEO lives in the static `index.html` shell — meta, Open Graph, and JSON-LD
+  (WebApplication + FAQPage + HowTo) plus a full `<noscript>` fallback, so crawlers
+  get the content without executing JavaScript
+- Configuration centralized in `src/config.js`; design tokens in CSS custom properties
+  in `src/index.css` — no hardcoded values downstream
 
 ## Project structure
 
 ```
 index.html                 Static SEO shell (meta, JSON-LD, noscript fallback)
-public/                    robots.txt, sitemap.xml, llms.txt (copied to build as-is)
+vercel.json                Build command, output dir, and security headers (CSP etc.)
+public/                    robots.txt, sitemap.xml, llms.txt, og-image, PWA icons, manifest
+scripts/
+  seo-colors.mjs           Curated named-color dataset for the SEO pages
+  gen-seo.mjs              Build-time generator: color/harmony/hub/404 static pages
 src/
-  config.js                All app configuration and harmony definitions
+  config.js                App config, harmonies, site/ads/pro settings
   index.css                Design tokens and styles (light/dark via data-theme)
   utils/color.js           Pure color math (HSL/hex, WCAG luminance & contrast)
+  utils/cvd.js             Colorblind-simulation matrices
   utils/exporters.js       CSS / Tailwind / SCSS / JSON code generators
   utils/media.js           Image color extraction + PNG palette download
-  hooks/                   useToast, useTheme, useLibrary (localStorage)
-  components/              Wheel (canvas), palette, scale, contrast, export, etc.
-.github/workflows/deploy.yml   Auto-deploy to GitHub Pages on push
+  hooks/                   useToast, useTheme, useLibrary, useHistory, usePro
+  components/              Wheel (canvas), palette, scale, contrast, export,
+                           SaveDialog, ProDialog, AdSlot, etc.
 ```
 
 ## Local development
@@ -31,16 +39,18 @@ src/
 ```bash
 npm install
 npm run dev      # http://localhost:5173
-npm run build    # production build in dist/
+npm run build    # production build + SEO pages in dist/
 ```
 
-## Deploy to GitHub Pages (automatic)
+## Deploy (Vercel)
 
-1. Create a public repo named `color-coordinator` and push this project
-2. Repo Settings → Pages → Source: **GitHub Actions**
-3. Push to `main` — the included workflow builds and deploys automatically
+Connected to Vercel's GitHub integration — every push to `main` auto-builds and deploys.
+`vercel.json` pins the build command (so the SEO generator runs) and the security headers.
 
-If your repo name differs, change `base` in `vite.config.js` to match, and update the canonical/OG URLs in `index.html` plus `public/robots.txt` and `public/sitemap.xml`.
+If you add a custom domain, update `CONFIG.site.origin` in `src/config.js`, the canonical/OG
+URLs in `index.html`, and the URLs in `public/robots.txt` + `public/llms.txt`, then rebuild.
+Vite `base` stays `/` for root deployment (it would need `/color-coordinator/` only for a
+GitHub Pages project site).
 
 ## Programmatic SEO pages
 
