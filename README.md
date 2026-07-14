@@ -18,7 +18,8 @@ Free color wheel and palette generator — React 19 + Vite, deployed on Vercel.
 ```
 index.html                 Static SEO shell (meta, JSON-LD, noscript fallback)
 vercel.json                Build command, output dir, and security headers (CSP etc.)
-public/                    robots.txt, sitemap.xml, llms.txt, og-image, PWA icons, manifest
+public/                    robots.txt, llms.txt, og-image, PWA icons, manifest
+                           (sitemap.xml is generated into dist/ by scripts/gen-seo.mjs)
 scripts/
   seo-colors.mjs           Curated named-color dataset for the SEO pages
   gen-seo.mjs              Build-time generator: color/harmony/hub/404 static pages

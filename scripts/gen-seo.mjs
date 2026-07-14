@@ -264,30 +264,34 @@ function write(pathNoSlash, html) {
   writeFileSync(join(dir, 'index.html'), html);
 }
 
-const urls = [];
+// Sitemap entries carry a tiered priority: home > hub > harmony guides > color pages.
+const entries = [{ loc: abs(''), priority: '1.0' }];
 writeFileSync(join(DIST, '404.html'), notFoundPage());
 write('colors', hubPage());
-urls.push(abs('colors/'));
+entries.push({ loc: abs('colors/'), priority: '0.8' });
 
 NAMED_COLORS.forEach((c, i) => {
   const related = [-4, -3, -2, -1, 1, 2, 3, 4]
     .map(d => NAMED_COLORS[(i + d + NAMED_COLORS.length) % NAMED_COLORS.length]);
   write('colors/' + slugify(c.name), colorPage(c, related));
-  urls.push(abs('colors/' + slugify(c.name) + '/'));
+  entries.push({ loc: abs('colors/' + slugify(c.name) + '/'), priority: '0.6' });
 });
 
 Object.keys(HARMONIES).forEach(key => {
   write('harmonies/' + key, harmonyPage(key));
-  urls.push(abs('harmonies/' + key + '/'));
+  entries.push({ loc: abs('harmonies/' + key + '/'), priority: '0.7' });
 });
 
-/* regenerate sitemap with the app root + all generated pages */
+/* sole owner of the deployed sitemap (public/sitemap.xml intentionally does not exist) */
 const today = new Date().toISOString().slice(0, 10);
+const xmlEscape = s => s.replace(/&/g, '&amp;').replace(/</g, '&lt;');
+const urlTag = ({ loc, priority }) =>
+  `  <url><loc>${xmlEscape(loc)}</loc><lastmod>${today}</lastmod><changefreq>monthly</changefreq><priority>${priority}</priority></url>`;
 const sitemap = `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url><loc>${abs('')}</loc><lastmod>${today}</lastmod><changefreq>monthly</changefreq><priority>1.0</priority></url>
-${urls.map(u => `  <url><loc>${u}</loc><lastmod>${today}</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>`).join('\n')}
-</urlset>`;
+${entries.map(urlTag).join('\n')}
+</urlset>
+`;
 writeFileSync(join(DIST, 'sitemap.xml'), sitemap);
 
-console.log(`SEO: generated ${NAMED_COLORS.length} color pages + ${Object.keys(HARMONIES).length} harmony pages + hub + 404, and ${urls.length + 1} sitemap URLs.`);
+console.log(`SEO: generated ${NAMED_COLORS.length} color pages + ${Object.keys(HARMONIES).length} harmony pages + hub + 404, and ${entries.length} sitemap URLs.`);
