@@ -8,10 +8,10 @@ export default function Header({ theme, onToggleTheme, onShare, onUndo, onRedo, 
           {showUpgrade && (
             <button className="btn upgrade" onClick={onUpgrade}>{'✨'} Upgrade</button>
           )}
-          <button className="icon-btn" title="Undo (Ctrl+Z)" aria-label="Undo" onClick={onUndo} disabled={!canUndo}>
+          <button className="icon-btn hist" title="Undo (Ctrl+Z)" aria-label="Undo" onClick={onUndo} disabled={!canUndo}>
             {'↶'}
           </button>
-          <button className="icon-btn" title="Redo (Ctrl+Shift+Z)" aria-label="Redo" onClick={onRedo} disabled={!canRedo}>
+          <button className="icon-btn hist" title="Redo (Ctrl+Shift+Z)" aria-label="Redo" onClick={onRedo} disabled={!canRedo}>
             {'↷'}
           </button>
           <button className="icon-btn" title="Copy shareable link" aria-label="Copy shareable link" onClick={onShare}>

@@ -79,7 +79,7 @@ header {
   max-width: 1100px; margin: 0 auto; padding: 14px 20px;
   display: flex; align-items: center; gap: 12px;
 }
-.logo { display: flex; align-items: center; gap: 10px; font-weight: 700; font-size: 17px; letter-spacing: -.02em; }
+.logo { display: flex; align-items: center; gap: 10px; font-weight: 700; font-size: 17px; letter-spacing: -.02em; white-space: nowrap; }
 .logo-dot { width: 26px; height: 26px; border-radius: 50%; background: conic-gradient(from 0deg, #E24B4A, #EF9F27, #97C459, #1D9E75, #378ADD, #7F77DD, #D4537E, #E24B4A); border: 3px solid var(--surface); box-shadow: 0 0 0 1px var(--border); }
 .header-actions { margin-left: auto; display: flex; gap: 8px; }
 .icon-btn {
@@ -122,11 +122,16 @@ main { max-width: 1100px; margin: 0 auto; padding: 24px 20px 60px; }
 @media (max-width: 820px) { .workbench { grid-template-columns: 1fr; } }
 .workbench > * { min-width: 0; }   /* let panels shrink below the wheel's intrinsic width */
 
+/* Phones: undo/redo are keyboard-oriented — hide them so the header stays single-line. */
+@media (max-width: 480px) {
+  .icon-btn.hist { display: none; }
+}
 /* Small phones (≤380px): tighten chrome so nothing overflows the viewport. */
 @media (max-width: 380px) {
   .header-inner, .hero-inner, main, .footer-inner { padding-left: 14px; padding-right: 14px; }
   .header-actions { gap: 6px; }
   .icon-btn { width: 34px; height: 34px; font-size: 15px; }
+  .logo { font-size: 16px; }
 }
 .panel {
   background: var(--surface); border: 1px solid var(--border);
