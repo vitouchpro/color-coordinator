@@ -280,6 +280,8 @@ pre.code {
 
 /* ---------- Dialog ---------- */
 .dialog {
+  /* margin:auto restores the modal centering that the global `* { margin:0 }` reset strips. */
+  margin: auto;
   border: 1px solid var(--border); border-radius: var(--radius);
   background: var(--surface); color: var(--ink); box-shadow: var(--shadow);
   padding: 0; width: min(92vw, 400px);
