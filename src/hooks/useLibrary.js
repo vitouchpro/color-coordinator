@@ -1,5 +1,6 @@
 import { useCallback, useState } from 'react';
 import { CONFIG } from '../config.js';
+import { mergeLibrary } from '../utils/library-io.js';
 
 const load = () => {
   try { return JSON.parse(localStorage.getItem(CONFIG.storageKeys.library)) || []; }
@@ -15,5 +16,11 @@ export function useLibrary(max = CONFIG.maxLibrary) {
   }, [max]);
   const add = useCallback(item => persist([item, ...load()]), [persist]);
   const remove = useCallback(idx => persist(load().filter((_, i) => i !== idx)), [persist]);
-  return { items, add, remove };
+  const addMany = useCallback(palettes => {
+    const before = load();
+    const merged = mergeLibrary(before, palettes);
+    persist(merged);
+    return { added: merged.length - before.length };
+  }, [persist]);
+  return { items, add, remove, addMany };
 }

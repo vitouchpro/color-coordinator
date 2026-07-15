@@ -1,7 +1,8 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { CONFIG, HARMONIES } from './config.js';
 import { clamp, hexToRgb, hslToHex, rgbToHsl } from './utils/color.js';
-import { downloadPng } from './utils/media.js';
+import { downloadPng, downloadText } from './utils/media.js';
+import { toExport, parseLibrary } from './utils/library-io.js';
 import { useToast } from './hooks/useToast.js';
 import { useTheme } from './hooks/useTheme.js';
 import { useLibrary } from './hooks/useLibrary.js';
@@ -142,7 +143,22 @@ export default function App() {
       toast('Palette loaded');
       window.scrollTo({ top: 0, behavior: 'smooth' });
     },
-    onShare: () => copyText(location.href, 'Share link copied')
+    onShare: () => copyText(location.href, 'Share link copied'),
+    onExportLibrary: () => {
+      const text = JSON.stringify(toExport(library.items, Date.now()), null, 2);
+      downloadText('color-coordinator-palettes.json', text);
+      toast('Palettes exported');
+    },
+    onImportLibrary: async file => {
+      if (!file) return;
+      try {
+        const palettes = parseLibrary(await file.text());
+        const { added } = library.addMany(palettes);
+        toast(added ? `Imported ${added} palette${added > 1 ? 's' : ''}` : 'No new palettes to import');
+      } catch (e) {
+        toast(e.message || 'Could not import that file');
+      }
+    }
   };
 
   return (
@@ -169,7 +185,9 @@ export default function App() {
         <ExportPanel colors={colors} base={{ h, s, l, mode }} onCopy={copyText} />
         <Extract onUseColor={setFromHex} toast={toast}
           count={pro.pro ? CONFIG.pro.extractColors : CONFIG.extractColors} />
-        <Library items={library.items} onLoad={handlers.onLoadPalette} onDelete={i => { library.remove(i); toast('Deleted'); }} />
+        <Library items={library.items} onLoad={handlers.onLoadPalette}
+          onDelete={i => { library.remove(i); toast('Deleted'); }}
+          onExport={handlers.onExportLibrary} onImport={handlers.onImportLibrary} />
         <AdSlot pro={pro.pro} />
         <About />
       </main>

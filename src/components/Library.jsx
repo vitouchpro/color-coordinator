@@ -1,7 +1,21 @@
-export default function Library({ items, onLoad, onDelete }) {
+import { useRef } from 'react';
+
+export default function Library({ items, onLoad, onDelete, onExport, onImport }) {
+  const fileRef = useRef(null);
+
   return (
     <section className="panel">
-      <h2>Saved palettes</h2>
+      <div className="library-head">
+        <h2>Saved palettes</h2>
+        <div className="library-actions">
+          <button className="btn" onClick={onExport} disabled={!items.length}>Export</button>
+          <button className="btn" onClick={() => fileRef.current.click()}>Import</button>
+          <input
+            ref={fileRef} type="file" accept="application/json,.json" hidden
+            onChange={e => { onImport(e.target.files[0]); e.target.value = ''; }}
+          />
+        </div>
+      </div>
       <div className="library">
         {items.length === 0 && (
           <p className="empty-note">No saved palettes yet. Build a theme and press "Save palette".</p>
@@ -18,7 +32,7 @@ export default function Library({ items, onLoad, onDelete }) {
             </button>
             <span className="name">{item.name}</span>
             <button className="del" aria-label={`Delete palette ${item.name}`} onClick={() => onDelete(idx)}>
-              {'\u2715'}
+              {'✕'}
             </button>
           </div>
         ))}

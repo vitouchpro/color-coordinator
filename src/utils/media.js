@@ -30,6 +30,16 @@ export function extractFromImage(file, count = CONFIG.extractColors) {
   });
 }
 
+/** Trigger a client-side download of a text blob (used for JSON palette export). */
+export function downloadText(filename, text, type = 'application/json') {
+  const url = URL.createObjectURL(new Blob([text], { type }));
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = filename;
+  a.click();
+  URL.revokeObjectURL(url);
+}
+
 /** Render the palette to a PNG and trigger a download. */
 export function downloadPng(colors) {
   const w = 1200, h = 500, c = document.createElement('canvas');
