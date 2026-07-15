@@ -13,6 +13,9 @@
   --border-strong: #C9C9C4;
   --live: #1D9E75;            /* dynamically set to the user's base color */
   --live-soft: rgba(29,158,117,.10);
+  --p1: var(--live);          /* live palette stops — the page paints itself from them */
+  --p2: var(--live);
+  --p3: var(--live);
   --radius: 12px;
   --radius-sm: 8px;
   --font-display: 'Archivo', system-ui, sans-serif;
@@ -46,6 +49,25 @@ body {
 button { font-family: inherit; cursor: pointer; }
 :focus-visible { outline: 2px solid var(--live); outline-offset: 2px; border-radius: 4px; }
 
+/* Signature atmosphere: a soft wash of the live palette across the top of the page. */
+body::before {
+  content: ''; position: fixed; inset: 0 0 auto 0; height: 460px; z-index: -1;
+  pointer-events: none; opacity: .55; transition: opacity .4s;
+  background:
+    radial-gradient(58% 100% at 12% -10%, color-mix(in srgb, var(--p1) 30%, transparent), transparent 68%),
+    radial-gradient(50% 100% at 88% -20%, color-mix(in srgb, var(--p3) 24%, transparent), transparent 66%);
+}
+[data-theme="dark"] body::before { opacity: .4; }
+
+/* Skip link — first thing keyboard/screen-reader users reach. */
+.skip-link {
+  position: fixed; top: 10px; left: 10px; z-index: 200;
+  background: var(--ink); color: var(--bg); padding: 9px 15px; border-radius: var(--radius-sm);
+  font-size: 13px; font-weight: 600; text-decoration: none;
+  transform: translateY(-160%); transition: transform var(--dur);
+}
+.skip-link:focus { transform: translateY(0); }
+
 /* ---------- Header ---------- */
 header {
   position: sticky; top: 0; z-index: 50;
@@ -70,16 +92,29 @@ header {
 .icon-btn:disabled { opacity: .38; cursor: default; }
 .icon-btn:disabled:hover { border-color: var(--border); background: var(--surface); }
 
-/* ---------- Hero band (signature: tints with the live color) ---------- */
+/* ---------- Hero band (signature: painted from the live palette) ---------- */
 .hero {
-  background: linear-gradient(180deg, var(--live-soft), transparent);
+  position: relative;
+  background:
+    linear-gradient(118deg, color-mix(in srgb, var(--p1) 20%, transparent), transparent 52%),
+    linear-gradient(242deg, color-mix(in srgb, var(--p3) 16%, transparent), transparent 56%);
   border-bottom: 1px solid var(--border);
   transition: background .4s;
 }
-.hero-inner { max-width: 1100px; margin: 0 auto; padding: 34px 20px 8px; }
-.hero h1 { font-size: clamp(26px, 4.5vw, 38px); font-weight: 700; letter-spacing: -.03em; line-height: 1.15; }
+.hero-inner { max-width: 1100px; margin: 0 auto; padding: 46px 20px 22px; }
+.hero-eyebrow {
+  display: inline-flex; align-items: center; gap: 9px;
+  font-family: var(--font-mono); font-size: 11.5px; font-weight: 500;
+  letter-spacing: .15em; text-transform: uppercase; color: var(--muted);
+  margin-bottom: 16px;
+}
+.hero-eyebrow .dot {
+  width: 9px; height: 9px; border-radius: 50%; background: var(--live);
+  box-shadow: 0 0 0 3px var(--live-soft); transition: background .4s;
+}
+.hero h1 { font-size: clamp(30px, 5.4vw, 47px); font-weight: 700; letter-spacing: -.035em; line-height: 1.06; }
 .hero h1 em { font-style: normal; color: var(--live); transition: color .4s; }
-.hero p { color: var(--muted); margin-top: 8px; max-width: 560px; font-size: 15px; }
+.hero-sub { color: var(--muted); margin-top: 13px; max-width: 580px; font-size: 15.5px; }
 
 /* ---------- Layout ---------- */
 main { max-width: 1100px; margin: 0 auto; padding: 24px 20px 60px; }

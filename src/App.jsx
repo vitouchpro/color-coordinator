@@ -71,6 +71,15 @@ export default function App() {
     root.setProperty('--live-soft', `rgba(${r},${g},${b},.10)`);
   }, [h, s, l]);
 
+  /* Signature: the hero + page atmosphere are painted from the live palette. */
+  useEffect(() => {
+    const root = document.documentElement.style;
+    const hex = colors.map(c => c.hex);
+    root.setProperty('--p1', hex[0] ?? 'var(--live)');
+    root.setProperty('--p2', hex[Math.min(1, hex.length - 1)] ?? 'var(--live)');
+    root.setProperty('--p3', hex[hex.length - 1] ?? 'var(--live)');
+  }, [colors]);
+
   /* Keep the shareable hash in sync with state. */
   useEffect(() => {
     const params = new URLSearchParams({ h, s, l, m: mode });
@@ -163,13 +172,14 @@ export default function App() {
 
   return (
     <>
+      <a className="skip-link" href="#main">Skip to the tool</a>
       <Header
         theme={theme} onToggleTheme={toggleTheme} onShare={handlers.onShare}
         onUndo={undo} onRedo={redo} canUndo={canUndo} canRedo={canRedo}
         pro={pro.pro} showUpgrade={pro.configured && !pro.pro} onUpgrade={() => setProOpen(true)}
       />
       <Hero />
-      <main>
+      <main id="main">
         <div className="workbench">
           <BasePanel h={h} s={s} l={l} toast={toast}
             onPick={handlers.onPick} onNudge={handlers.onNudge}

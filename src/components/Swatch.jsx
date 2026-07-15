@@ -32,7 +32,12 @@ export default function Swatch({ color, index, locked, cvd, onCopy, onToggleLock
 
   return (
     <div className="swatch">
-      <div className="swatch-color" style={{ background: shown }} title={`Click to copy ${color.hex}`} onClick={copy}>
+      <div
+        className="swatch-color" style={{ background: shown }}
+        role="button" tabIndex={0} aria-label={`Copy ${color.hex}`} title={`Click to copy ${color.hex}`}
+        onClick={copy}
+        onKeyDown={e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); copy(); } }}
+      >
         <button
           className={`lock${locked ? ' on' : ''}`}
           aria-label={`${locked ? 'Unlock' : 'Lock'} color ${color.hex}`}
