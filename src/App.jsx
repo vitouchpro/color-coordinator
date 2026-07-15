@@ -188,7 +188,7 @@ export default function App() {
             onMode={handlers.onMode} onCopy={copyText} onToggleLock={handlers.onToggleLock}
             onSetSwatch={handlers.onSetSwatch} onSave={handlers.onSave}
             onCopyAll={() => copyText(colors.map(c => c.hex).join(', '), 'Palette copied')}
-            onPng={() => { downloadPng(colors); toast('PNG downloaded'); }} />
+            onPng={() => { downloadPng(colors, { brand: !pro.whiteLabel }); toast('PNG downloaded'); }} />
         </div>
         <Scale h={h} s={s} cvd={cvd} onCopy={copyText} />
         <Contrast h={h} s={s} l={l} colors={colors} />

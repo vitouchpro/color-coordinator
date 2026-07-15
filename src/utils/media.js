@@ -40,8 +40,9 @@ export function downloadText(filename, text, type = 'application/json') {
   URL.revokeObjectURL(url);
 }
 
-/** Render the palette to a PNG and trigger a download. */
-export function downloadPng(colors) {
+/** Render the palette to a PNG and trigger a download.
+ *  `brand` stamps a small credit label; white-label (Enterprise) plans pass false. */
+export function downloadPng(colors, { brand = true } = {}) {
   const w = 1200, h = 500, c = document.createElement('canvas');
   c.width = w; c.height = h;
   const g = c.getContext('2d');
@@ -53,6 +54,14 @@ export function downloadPng(colors) {
     g.font = '600 30px Archivo, sans-serif';
     g.fillText(col.hex, i * bw + 24, h - 34);
   });
+  if (brand) {
+    const last = colors[colors.length - 1];
+    g.fillStyle = last.l > 55 ? 'rgba(17,17,17,.6)' : 'rgba(255,255,255,.72)';
+    g.font = '600 22px Archivo, sans-serif';
+    g.textAlign = 'right';
+    g.fillText('color-coordinator.vercel.app', w - 24, 42);
+    g.textAlign = 'left';
+  }
   const a = document.createElement('a');
   a.download = 'color-coordinator-palette.png';
   a.href = c.toDataURL('image/png');

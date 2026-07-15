@@ -27,8 +27,15 @@ function verifyLicense(key) {
  * Verification is client-side — good enough for a low-price utility, but a
  * determined user can bypass it (see README).
  */
+const readWhiteLabel = () => {
+  if (CONFIG.pro.whiteLabel === true) return true;
+  try { return localStorage.getItem(CONFIG.storageKeys.whiteLabel) === '1'; }
+  catch { return false; }
+};
+
 export function usePro() {
   const [pro, setPro] = useState(() => Boolean(read()?.pro));
+  const [whiteLabel] = useState(readWhiteLabel);
   const { gumroadPermalink, recurring = false, recheckDays = 7 } = CONFIG.pro;
   const configured = Boolean(gumroadPermalink);
 
@@ -71,5 +78,5 @@ export function usePro() {
 
   const clear = useCallback(() => { localStorage.removeItem(KEY); setPro(false); }, []);
 
-  return { pro, configured, verify, clear };
+  return { pro, whiteLabel, configured, verify, clear };
 }

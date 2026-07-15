@@ -4,7 +4,7 @@ export const CONFIG = {
   defaultColor: { h: 160, s: 69, l: 37 },
   lightnessRange: { min: 15, max: 85 },
   scaleStops: { 50: 97, 100: 93, 200: 85, 300: 74, 400: 62, 500: 50, 600: 42, 700: 34, 800: 26, 900: 18 },
-  storageKeys: { theme: 'cc-theme', library: 'cc-library', pro: 'cc-pro' },
+  storageKeys: { theme: 'cc-theme', library: 'cc-library', pro: 'cc-pro', whiteLabel: 'cc-whitelabel' },
   maxLibrary: 30,
   extractColors: 6,
   toastMs: 1600,
@@ -26,7 +26,11 @@ export const CONFIG = {
   pro: {
     gumroadPermalink: '', gumroadUrl: '',
     recurring: true, price: '$4/mo', recheckDays: 7,
-    maxLibrary: 1000, extractColors: 12
+    maxLibrary: 1000, extractColors: 12,
+    // White-label (remove branding from exports) is an Enterprise capability. Until
+    // Enterprise self-serve exists it is provisioned per-customer: set true here for a
+    // dedicated white-label build, or set localStorage 'cc-whitelabel' = '1'.
+    whiteLabel: false
   }
 };
 
